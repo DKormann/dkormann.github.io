@@ -2,27 +2,69 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<link rel="icon" href="./favicon.png" />
+		<link rel="icon" href="./icon.svg" />
 		<meta name="viewport" content="width=device-width" />
+		<link rel="stylesheet" href="style.css">
+		<title>kormann</title>
 		
-		<link rel="modulepreload" href="./_app/immutable/entry/start.8b70d3f7.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/index.6dba6488.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/singletons.d678a73a.js">
-		<link rel="modulepreload" href="./_app/immutable/entry/app.9e64cf9d.js">
-		<link rel="modulepreload" href="./_app/immutable/nodes/0.6e67e459.js">
-		<link rel="modulepreload" href="./_app/immutable/nodes/2.680e4dbb.js">
+		<link rel="modulepreload" href="./_app/immutable/entry/start.0e60a977.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/index.472b9089.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/singletons.db06eebb.js">
+		<link rel="modulepreload" href="./_app/immutable/entry/app.f9f3e5f7.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/0.29c2f224.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/2.bd287295.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">
 
 
-<h1>Hi im Dominik</h1>
+<div class="item"><h1>my profile</h1>
+
+    <p class="center">Kormann</p></div>
+
+<div class="item"><img src="portrait.png" id="portrait" alt="">
+
+    <h2>Introduction</h2>
+
+    <p>Hi, I&#39;m Dominik Kormann and Coding is my long time Passion.</p> 
+
+    <p>So on this page I want to show you some of my skills and what I want to accomplish in the future.</p>
+
+
+    <h3>technical skills:</h3>
+
+    <p>strong:</p>
+    <ul><li>Python</li>
+        <li>Html / Javascript + Vuejs Framework</li></ul>
+    <p>solid:</p>
+    <ul><li>Java + Spring boot</li>
+        <li>C# + Unity</li>
+        <li>Tensorflow</li>
+        <li>Webgl shader programming</li>
+        <li>Golang</li></ul>
+
+    <p>decent</p>
+
+    <ul><li>Rust + web assembly</li>
+        <li>C</li>
+        <li>Haskell</li>
+        <li>Lua script language</li>
+        <li>Bash script</li></ul>
+
+    <p>Things I want to learn more about</p>
+
+    <ul><li>Rust and high performance systems</li>
+        <li>Tensorflow and machinge learning</li>
+        <li>organisation and operation of big software Projects</li></ul></div>
+
+
+<div class="item"><canvas id="canvas" width="1000" height="1000"></canvas></div>
 
 
 			
 			<script>
 				{
-					__sveltekit_149jlj3 = {
+					__sveltekit_3h3v7h = {
 						base: new URL(".", location).pathname.slice(0, -1),
 						env: {}
 					};
@@ -32,8 +74,8 @@
 					const data = [null,null];
 
 					Promise.all([
-						import("./_app/immutable/entry/start.8b70d3f7.js"),
-						import("./_app/immutable/entry/app.9e64cf9d.js")
+						import("./_app/immutable/entry/start.0e60a977.js"),
+						import("./_app/immutable/entry/app.f9f3e5f7.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2],

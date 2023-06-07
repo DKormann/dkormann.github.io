@@ -1,9 +1,42 @@
 import { browser } from "$app/environment";
 
-if(browser){
 
-    // Get a reference to the canvas element
-    const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+// function add_shader(canvas:HTMLCanvasElement){
+
+// }
+
+const color_palette = [
+    
+    [
+        [0.8, 0.7, 0.1],
+        [0.9, 0.5, 0.2],
+        [0.8, 0.7, 0.7],
+
+    ],
+    [
+        [0.3, 0.4, 0.9],
+        [0.8, 0.7, 0.2],
+        [0.9, 0.9, 0.9]
+    ],
+    [
+        [0.9, 0.5, 0.1],//outer
+        [0.6, 0.6, 0.4],//street
+        [0.9, 0.9, 0.9]//inner
+
+    ],
+]
+
+if (browser) {
+    const canvases = document.querySelectorAll('.canvas') as NodeListOf<HTMLCanvasElement>;
+    canvases.forEach((canvas,i) => {
+        const col_pal = color_palette[i%color_palette.length];
+        add_shader(canvas, col_pal[0], col_pal[1], col_pal[2]);
+    });
+}
+
+function add_shader (canvas:HTMLCanvasElement, c1= [0.2, 0.2, 0.2], c2 = [0.8, 0.8, 0.8], c3 = [0.8, 0.8, 0.8]){
+    // // Get a reference to the canvas element
+    // const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 
     console.log(window.innerWidth, window.innerHeight);
     // canvas.width = 300
@@ -32,10 +65,15 @@ if(browser){
         uniform float canvasWidth;
         uniform float canvasHeight;
         uniform float scrollY;
+        uniform float windowWidth;
 
+        uniform float top;
         uniform vec2 mouse;
-
         uniform float windowratio;
+
+        uniform vec3 c1;
+        uniform vec3 c2;
+        uniform vec3 c3;
 
 
         float rnd(float seed){
@@ -57,7 +95,6 @@ if(browser){
         }
 
         vec3 wires(float x, float h,float light){
-            vec3 base_color = vec3(0.05, 0.05, 0.1);
 
             x = x + h*25.23;
 
@@ -70,7 +107,7 @@ if(browser){
             float silver_stripe = pulse(x+124., 0.1, 20.) ;
             float gold_stripe   = pulse(x     , 0.05, 20.) ;
 
-            vec3 color = base_color;
+            vec3 color = vec3(0.0);
             color = mix(color, gold_color, gold_stripe);
             color = mix(color, silver_color, silver_stripe);
             color = mix(color, bronze_color, bronze_stripe);
@@ -95,56 +132,39 @@ if(browser){
 
         }
 
+        float flipped = 0.;
+
         vec3 tiling(float x, float y){
 
-            float rep = 3.5;
+            float rep = 7.;
+
+            float fill_height = 0.9;
+
+            y = y/fill_height;
 
             float ystep = floor(y*rep);
 
-            float tilex = x + mod(ystep, 2.0)*2.5/rep;
+            flipped = mod(ystep, 2.0);
+            float tilex = x + flipped*2.5/rep;
             float tiley = y;
 
             float xstep = floor(tilex*rep);
             float rseed = random(xstep + ystep*100.0);
 
-
             tilex = fract(tilex*rep);
-            tiley = fract(tiley*rep);
-
+            tiley = fract(tiley*rep)*fill_height;
 
             tilex = tilex * 2. - 1.;
             tiley = tiley * 2. - 1.;
             return vec3(tilex, tiley, rseed);
         }
 
-        vec3 tile(vec3 p, float light, vec2 mousevec){
-
-            float l = 0.;
-
-            if (mousevec.y * 16. > p.y){
-                l = 1.0;
-            }
-
-            l = mousevec.y;
-            l = .5;
-
-
-            float h = p.z;
-
-            vec3 primary = vec3(0.1, 0.5, 0.7);
-
-            vec3 base_color = vec3(0.05, 0.05, 0.1);
-
-            p.x = abs(p.x);
-            p.y = abs(p.y);
+        float roundCorner(vec2 p, float r){
 
             float signal = max(p.x, p.y);
 
-            float diff = abs(p.x-p.y);
-
-
             // round corners
-            float r = 0.1;
+            float diff = abs(p.x-p.y);
             if (diff < r){
                 float flt = signal + min(p.x,p.y)+r;
                 flt /= 2.;
@@ -152,41 +172,156 @@ if(browser){
                 push =1.+push/r;
                 push = r - push*push*r;
                 signal = flt - push*0.25;
+
             }
+            return signal;
+
+        }
+
+        float spot(vec2 p, vec2 center, float rseed){
+
+            
+            float radius = 0.03;
+            float falloff = 40.0;
+            float dist = length(p-center);
+            float signal = peak(dist, 0.0, radius, falloff);
+            return signal * (random(rseed*87.+13.23)>0.4?1.0:0.2);
+        }
+
+        vec4 tile(vec3 p, vec2 mousevec ){
+
+            float l = 0.;
+
+            float light = .5;
+            if (mousevec.y * 16. > p.y){
+                l = 1.0;
+            }
+
+            l = mousevec.y;
+            l = .5;
+
+            float h = p.z;
+
+
+            vec3 col = vec3(0.);
+
+            col += spot(p.xy, vec2(0.,0),h+1.) * c2;
+            col += spot(p.xy, vec2(.2,.0),h+2.) * c2;
+            col += spot(p.xy, vec2(-.2,.0),h+3.) * c2;
+            col += spot(p.xy, vec2(.1,.17),h+4.) * c2;
+            col += spot(p.xy, vec2(-.1,.17),h+5.) * c2;
+            col += spot(p.xy, vec2(.1,-.17),h+6.) * c2;
+            col += spot(p.xy, vec2(-.1,-.17),h+7.) * c2;
+
+
+            float xdiff = abs ( mousevec.x * 13.3 + p.x);
+            float ydiff = abs ( mousevec.y * 13.3 - p.y);
+
+            light = mix(0.7,1., peak (max(xdiff,ydiff),0.0,0.9,5.));
+
+
+            p.x = abs(p.x);
+            p.y = abs(p.y);
+
+            float signal = roundCorner(p.xy, 0.1);
+
 
             float border = peak (signal,0.7,0.1,50.);
 
             float inner = peak (signal,0.5,0.1,50.);
 
-            vec3 col = primary * border;
+            col += c1 * border;
 
-            col += base_color + inner * l;
+            col += c3 * inner ;
+
+
+            return vec4(col *light ,peak(signal, 0.0, 1.4, 20.)) ;
+
+        }
+
+        vec3 street(vec3 p, float light){
+
+
+            float h = p.z;
+
+
+
+            p.x = abs(p.x);
+            p.y = abs(p.y);
+
+            float signal = roundCorner(p.xy, 0.1);
+
+            float street_d = (signal - 0.8)/0.2;
+
+            
+
+            if (p.x < 0.5 && p.y > 0.5){
+
+                float sx = p.x/0.2;
+                float sy = (p.y - 0.8)/0.2;
+
+                street_d = min(sx, sy);
+                street_d = roundCorner(vec2(1.-sx,1.-sy), .5);
+                street_d = 1.-street_d;
+
+            }
+
+            vec3 col = vec3(0.);
+
+            street_d += (1.-2.*street_d)*flipped;
+
+            float street = peak (street_d,0.7,0.1,50.);
+            street += peak (street_d,0.3,0.1,50.);
+
+
+            if (street_d > 0. && street_d < 1.){
+                col +=  street * c2;
+            }
+
             return col;
         }
 
+
         void main() {
             vec2 normalizedPos = gl_FragCoord.xy;
-            float x = normalizedPos.x / canvasWidth;
-            float y = normalizedPos.y / canvasHeight;         
+
+            float x = normalizedPos.x ;
+            float y = (normalizedPos.y ) ;
+
+
+            x = normalizedPos.x / canvasWidth;
+            y = 1.-(normalizedPos.y ) / canvasHeight;    
+
+            y/=windowratio;
+
+            y += (top)/windowWidth;
+            
+            float sdiff = 0.05;
+            float y2 = y*(1.-sdiff)+sdiff/2.;
+            float x2 = x*(1.-sdiff)+sdiff/2.;
+
+
+
+            y += -scrollY*0.2;
+            y2 += -scrollY*0.15;
+
 
             vec2 mousevec = mouse - vec2(x,1.-y);
             mousevec.y/=windowratio;
             float mouse_dist = length(mousevec);
 
 
-            
-            y/=windowratio;
-
-            y = y - scrollY/windowratio * .8;
-            x = x - 0.5;
-            x = x * 2.0;
-            y = y * 2.0;
-
             vec3 tl = tiling(x, y);
+            vec3 tl2 = tiling(x2, y2);
 
-            float light = 0.25;
 
-            vec3 color = tile(tl, 1.-mouse_dist*2., mousevec)*light;
+            float light = .5;
+
+            vec3 color = street(tl, 1.-mouse_dist*2.);
+
+            vec4 house = tile(tl2, mousevec);
+            color = mix(color, house.xyz, house.w) * light;
+
 
             gl_FragColor = vec4(color, 1.0);
 
@@ -242,27 +377,47 @@ if(browser){
     const scrollYLocation = gl.getUniformLocation(program, 'scrollY');
     const windowratioLocation = gl.getUniformLocation(program, 'windowratio');
     const mouseLocation = gl.getUniformLocation(program, 'mouse');
+    const topLocation = gl.getUniformLocation(program, 'top');
+    const windowWidthLocation = gl.getUniformLocation(program, 'windowWidth');
+    const c1Location = gl.getUniformLocation(program, 'c1');
+    const c2Location = gl.getUniformLocation(program, 'c2');
+    const c3Location = gl.getUniformLocation(program, 'c3');
+
+
+    const parent = canvas.parentElement as HTMLDivElement;
 
     // Pass the canvas dimensions as uniforms
     gl.uniform1f(canvasWidthLocation, canvas.width);
     gl.uniform1f(canvasHeightLocation, canvas.height);
-    gl.uniform1f(scrollYLocation, window.scrollY/window.innerHeight);
-    gl.uniform1f(windowratioLocation, window.innerWidth/window.innerHeight);
-    gl.uniform2f(mouseLocation, 0, 0);
+    gl.uniform1f(scrollYLocation, window.scrollY/parent.clientHeight);
+    gl.uniform1f(windowratioLocation, parent.clientWidth/parent.clientHeight);
+    gl.uniform1f(windowWidthLocation, window.innerWidth)
 
-    gl.uniform1f(scrollYLocation, window.scrollY/window.innerHeight);
+
+
+    gl.uniform3f(c1Location, c1[0], c1[1], c1[2]);
+    gl.uniform3f(c2Location, c2[0], c2[1], c2[2]);
+    gl.uniform3f(c3Location, c3[0], c3[1], c3[2]);
+
+    gl.uniform2f(mouseLocation, 0, 0);
+    gl.uniform1f(topLocation, parent.offsetTop);
+
+
+    
+
+    gl.uniform1f(scrollYLocation, window.scrollY/parent.clientHeight);
     gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
 
     
 
     window.addEventListener('scroll', () => {
-        gl.uniform1f(scrollYLocation, window.scrollY/window.innerHeight);
+        gl.uniform1f(scrollYLocation, window.scrollY/window.innerWidth);
         gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
         
     });
 
     window.addEventListener("mousemove", (e) => {
-        gl.uniform2f(mouseLocation, e.clientX/window.innerWidth, e.clientY/window.innerHeight);
+        gl.uniform2f(mouseLocation, e.clientX/parent.clientWidth, e.clientY/parent.clientHeight);
         gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
     });
     

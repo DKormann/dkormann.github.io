@@ -8,20 +8,23 @@ import { browser } from "$app/environment";
 const color_palette = [
     
     [
+        // yellow
         [0.8, 0.7, 0.1],
-        [0.9, 0.5, 0.2],
+        [0.5, 0.7, 0.4],
         [0.8, 0.7, 0.7],
 
     ],
     [
+        // blue
         [0.3, 0.4, 0.9],
-        [0.8, 0.7, 0.2],
-        [0.9, 0.9, 0.9]
+        [0.7, 0.6, 0.5],
+        [0.7, 0.7, 0.8]
     ],
     [
+        //orange
         [0.9, 0.5, 0.1],//outer
-        [0.6, 0.6, 0.4],//street
-        [0.9, 0.9, 0.9]//inner
+        [0.9, 0.3, 0.2],//street
+        [0.7, 0.8, 0.7]//inner
 
     ],
 ]
@@ -66,10 +69,11 @@ function add_shader (canvas:HTMLCanvasElement, c1= [0.2, 0.2, 0.2], c2 = [0.8, 0
         uniform float canvasHeight;
         uniform float scrollY;
         uniform float windowWidth;
+        uniform float windowHeight;
 
         uniform float top;
         uniform vec2 mouse;
-        uniform float windowratio;
+        uniform float parentRatio;
 
         uniform vec3 c1;
         uniform vec3 c2;
@@ -136,7 +140,7 @@ function add_shader (canvas:HTMLCanvasElement, c1= [0.2, 0.2, 0.2], c2 = [0.8, 0
 
         vec3 tiling(float x, float y){
 
-            float rep = 7.;
+            float rep = 7./1000.*windowWidth;
 
             float fill_height = 0.9;
 
@@ -193,15 +197,8 @@ function add_shader (canvas:HTMLCanvasElement, c1= [0.2, 0.2, 0.2], c2 = [0.8, 0
             float l = 0.;
 
             float light = .5;
-            if (mousevec.y * 16. > p.y){
-                l = 1.0;
-            }
-
-            l = mousevec.y;
-            l = .5;
 
             float h = p.z;
-
 
             vec3 col = vec3(0.);
 
@@ -213,12 +210,16 @@ function add_shader (canvas:HTMLCanvasElement, c1= [0.2, 0.2, 0.2], c2 = [0.8, 0
             col += spot(p.xy, vec2(.1,-.17),h+6.) * c2;
             col += spot(p.xy, vec2(-.1,-.17),h+7.) * c2;
 
+            float xdiff = abs ( mousevec.x + p.x);
+            float ydiff = abs ( mousevec.y + p.y);
 
-            float xdiff = abs ( mousevec.x * 13.3 + p.x);
-            float ydiff = abs ( mousevec.y * 13.3 - p.y);
 
-            light = mix(0.7,1., peak (max(xdiff,ydiff),0.0,0.9,5.));
+            light = mix(0.5,1.,peak(max(xdiff,ydiff),0.0,0.9,5.));
 
+            float dist = length(vec2(xdiff,ydiff));
+            float scaler = mix(.9,1., peak(dist,0.0,2.,2.));
+
+            p /=scaler;
 
             p.x = abs(p.x);
             p.y = abs(p.y);
@@ -244,8 +245,6 @@ function add_shader (canvas:HTMLCanvasElement, c1= [0.2, 0.2, 0.2], c2 = [0.8, 0
 
             float h = p.z;
 
-
-
             p.x = abs(p.x);
             p.y = abs(p.y);
 
@@ -266,7 +265,7 @@ function add_shader (canvas:HTMLCanvasElement, c1= [0.2, 0.2, 0.2], c2 = [0.8, 0
 
             }
 
-            vec3 col = vec3(0.);
+            vec3 col = vec3(0.)+c2 * 0.15;
 
             street_d += (1.-2.*street_d)*flipped;
 
@@ -283,6 +282,8 @@ function add_shader (canvas:HTMLCanvasElement, c1= [0.2, 0.2, 0.2], c2 = [0.8, 0
 
 
         void main() {
+
+
             vec2 normalizedPos = gl_FragCoord.xy;
 
             float x = normalizedPos.x ;
@@ -292,7 +293,7 @@ function add_shader (canvas:HTMLCanvasElement, c1= [0.2, 0.2, 0.2], c2 = [0.8, 0
             x = normalizedPos.x / canvasWidth;
             y = 1.-(normalizedPos.y ) / canvasHeight;    
 
-            y/=windowratio;
+            y/=parentRatio;
 
             y += (top)/windowWidth;
             
@@ -300,26 +301,30 @@ function add_shader (canvas:HTMLCanvasElement, c1= [0.2, 0.2, 0.2], c2 = [0.8, 0
             float y2 = y*(1.-sdiff)+sdiff/2.;
             float x2 = x*(1.-sdiff)+sdiff/2.;
 
-
-
             y += -scrollY*0.2;
             y2 += -scrollY*0.15;
 
 
-            vec2 mousevec = mouse - vec2(x,1.-y);
-            mousevec.y/=windowratio;
-            float mouse_dist = length(mousevec);
+            float my = mouse.y/windowWidth;
+            float mx = mouse.x/windowWidth;
+
+            my -= y - scrollY*0.8;
+
+            mx -= x;
+
+            // gl_FragColor = vec4(mx,my,0., 1.0);
+            // return ;
 
 
             vec3 tl = tiling(x, y);
             vec3 tl2 = tiling(x2, y2);
 
 
-            float light = .5;
+            float light = .8;
 
-            vec3 color = street(tl, 1.-mouse_dist*2.);
+            vec3 color = street(tl, 1.);
 
-            vec4 house = tile(tl2, mousevec);
+            vec4 house = tile(tl2, vec2(mx,my) * 12. *(windowWidth/windowHeight) );
             color = mix(color, house.xyz, house.w) * light;
 
 
@@ -375,10 +380,11 @@ function add_shader (canvas:HTMLCanvasElement, c1= [0.2, 0.2, 0.2], c2 = [0.8, 0
     const canvasWidthLocation = gl.getUniformLocation(program, 'canvasWidth');
     const canvasHeightLocation = gl.getUniformLocation(program, 'canvasHeight');
     const scrollYLocation = gl.getUniformLocation(program, 'scrollY');
-    const windowratioLocation = gl.getUniformLocation(program, 'windowratio');
+    const parentRatioLocation = gl.getUniformLocation(program, 'parentRatio');
     const mouseLocation = gl.getUniformLocation(program, 'mouse');
     const topLocation = gl.getUniformLocation(program, 'top');
     const windowWidthLocation = gl.getUniformLocation(program, 'windowWidth');
+    const windowHeightLocation = gl.getUniformLocation(program, 'windowHeight');
     const c1Location = gl.getUniformLocation(program, 'c1');
     const c2Location = gl.getUniformLocation(program, 'c2');
     const c3Location = gl.getUniformLocation(program, 'c3');
@@ -390,8 +396,9 @@ function add_shader (canvas:HTMLCanvasElement, c1= [0.2, 0.2, 0.2], c2 = [0.8, 0
     gl.uniform1f(canvasWidthLocation, canvas.width);
     gl.uniform1f(canvasHeightLocation, canvas.height);
     gl.uniform1f(scrollYLocation, window.scrollY/parent.clientHeight);
-    gl.uniform1f(windowratioLocation, parent.clientWidth/parent.clientHeight);
+    gl.uniform1f(parentRatioLocation, parent.clientWidth/parent.clientHeight);
     gl.uniform1f(windowWidthLocation, window.innerWidth)
+    gl.uniform1f(windowHeightLocation, window.innerHeight)
 
 
 
@@ -403,12 +410,12 @@ function add_shader (canvas:HTMLCanvasElement, c1= [0.2, 0.2, 0.2], c2 = [0.8, 0
     gl.uniform1f(topLocation, parent.offsetTop);
 
 
-    
-
     gl.uniform1f(scrollYLocation, window.scrollY/parent.clientHeight);
+    // gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
+
+    gl.uniform1f(scrollYLocation, window.scrollY/window.innerWidth);
     gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
 
-    
 
     window.addEventListener('scroll', () => {
         gl.uniform1f(scrollYLocation, window.scrollY/window.innerWidth);
@@ -417,7 +424,7 @@ function add_shader (canvas:HTMLCanvasElement, c1= [0.2, 0.2, 0.2], c2 = [0.8, 0
     });
 
     window.addEventListener("mousemove", (e) => {
-        gl.uniform2f(mouseLocation, e.clientX/parent.clientWidth, e.clientY/parent.clientHeight);
+        gl.uniform2f(mouseLocation, e.clientX, e.clientY);
         gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
     });
     

@@ -69,6 +69,19 @@
             <li>Machinge learning</li>
             <li>Organisation and operation of big software Projects</li>
         </ul>
+        <p>
+            connect with me: 
+            <br>
+            <a href="https://x.com/__kormann__">X</a>
+            <br>
+            <a href="https://github.com/dkormann">github</a>
+            <br>
+            <a href="https://sciepedia.com/kormann">sciepedia</a>
+            <br>
+            <a href="mailto:dominikormann@outlook.com">email</a> dominikormann@outlook.com
+
+        </p>
+        <br>
         <p>in the following I want to present some software I wrote</p>
     </div>
 </div>

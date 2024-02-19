@@ -2,17 +2,17 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<link rel="icon" href="./icon.svg" />
+		<link rel="icon" href="./icon.png" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="stylesheet" href="style.css">
-		<title>kormann</title>
+		<title>dkormann</title>
 		
-		<link rel="modulepreload" href="./_app/immutable/entry/start.686947ee.js">
+		<link rel="modulepreload" href="./_app/immutable/entry/start.569386f7.js">
 		<link rel="modulepreload" href="./_app/immutable/chunks/index.472b9089.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/singletons.a4618931.js">
-		<link rel="modulepreload" href="./_app/immutable/entry/app.1f2da725.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/singletons.2eebb409.js">
+		<link rel="modulepreload" href="./_app/immutable/entry/app.30184913.js">
 		<link rel="modulepreload" href="./_app/immutable/nodes/0.29c2f224.js">
-		<link rel="modulepreload" href="./_app/immutable/nodes/2.7e38fe65.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/2.0a7469d2.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">
@@ -31,26 +31,27 @@
 
         <h2>Introduction</h2>
 
-        <p>Hi, I&#39;m Dominik Kormann and Coding is my long time Passion.</p> 
+        <p>Hi, I&#39;m Dominik Kormann and I coding is what I do.</p> 
 
-        <p>So on this page I want to show you some of my skills and what I want to accomplish in the future.</p>
+        <p>On this page I want to show you some of my skills and what I want to accomplish in the future.</p>
 
 
         <h3>technical skills:</h3>
 
         <p>strong:</p>
-        <ul><li>Python</li>
-            <li>Html / Javascript + Vuejs Framework</li></ul>
+        <ul><li>Machine learning with Python + Pytorch</li>
+            <li>Web dev. with Svelte.js framework</li></ul>
         <p>solid:</p>
-        <ul><li>Java + Spring boot</li>
-            <li>C# + Unity</li>
-            <li>Tensorflow</li>
+        <ul><li>Web dev. + Vue.js</li>
+            <li>Backend with Java + Spring boot</li>
+            <li>Game dev. with C# + Unity</li>
             <li>Webgl shader programming</li>
             <li>Golang</li></ul>
-
+        
         <p>decent</p>
-
+        
         <ul><li>Rust + web assembly</li>
+            <li>Tensorflow</li>
             <li>C</li>
             <li>Haskell</li>
             <li>Lua script language</li>
@@ -59,18 +60,38 @@
         <p>Things I want to learn more about</p>
 
         <ul><li>Rust and high performance systems</li>
-            <li>Tensorflow and machinge learning</li>
-            <li>organisation and operation of big software Projects</li></ul>
-        <p>in the following I want to present some software examples</p></div></div>
+            <li>Machinge learning</li>
+            <li>Organisation and operation of big software Projects</li></ul>
+        <p>in the following I want to present some software I wrote</p></div></div>
+
+
+
+<div class="item"><canvas class="canvas" width="1000" height="1000"></canvas>
+    <div class="itemcontent"><h2>Sciepedia</h2>
+
+        <p><a href="https://sciepedia.com">Sciepedia</a> is a notetaking app that makes it easy to create interlinked notes and share them with other users.</p></div></div>
+
+
+
+<div class="item"><canvas class="canvas" width="1000" height="1000"></canvas>
+    <div class="itemcontent"><h2>Instalingua</h2>
+
+        <p><a href="https://instalingua.com">Instalingua.com</a> was developed as part of a university Project together with <a href="https://github.com/flo-bit">@flo-bit</a></p>
+        <p>The Idea is to employ a chat bot to teach you different languages.</p>
+        <p>(On first opening the site it might take a minute since a container is gonna be spun up)</p></div></div>
+
+
+
+
 
 
 <div class="item"><canvas class="canvas" width="1000" height="1000"></canvas>
     <div class="itemcontent"><h2>Monsunbloom</h2>
 
-        <p>This is a website that wants to teach you math in a more modern way. Try it out here: <a href="https://www.monsunbloom.com">Monsunbloom</a></p>
+        <p>This is a website that wants to teach you math in a more modern way. Try it out here: <a href="https://www.monsunbloom.com">Monsunbloom</a> [site might be down at the moment] </p>
         <p>The Idea is that we want to create a feed of small math challenges for the user that are tunes to the current skillset of the student.</p>
 
-        <h3>Softaware:</h3>
+        <h3>Software:</h3>
 
         <p>The frontend is a relatively simple svelte application. 
             The core services is the account creation and after that display a feed of math excerices and the corresponding graphics.
@@ -89,23 +110,10 @@
         </p></div></div>
 
 
-<div class="item"><canvas class="canvas" width="1000" height="1000"></canvas>
-    <div class="itemcontent"><h2>Sciepedia</h2>
-
-        <p><a href="https://www.sciepedia.com">Sciepedia</a> is a notetaking app that makes it easy to create interlinked notes and share them with other users.</p></div></div>
-
-
-
-<div class="item"><canvas class="canvas" width="1000" height="1000"></canvas>
-    <div class="itemcontent"><h2>Flai</h2>
-
-        <p><a href="https://dkormann.github.io/flai">Foreign language AI</a> was developed as part of a university Project together with <a href="https://github.com/flo-bit">@flo-bit</a></p></div></div>
-
-
 			
 			<script>
 				{
-					__sveltekit_5kt0yf = {
+					__sveltekit_xmxrnd = {
 						base: new URL(".", location).pathname.slice(0, -1),
 						env: {}
 					};
@@ -115,8 +123,8 @@
 					const data = [null,null];
 
 					Promise.all([
-						import("./_app/immutable/entry/start.686947ee.js"),
-						import("./_app/immutable/entry/app.1f2da725.js")
+						import("./_app/immutable/entry/start.569386f7.js"),
+						import("./_app/immutable/entry/app.30184913.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2],

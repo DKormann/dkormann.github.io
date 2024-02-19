@@ -1,9 +1,6 @@
-
-
 <script lang="ts">
 
     import "./shader"
-
 
 </script>
 
@@ -33,31 +30,32 @@
 
         <h2>Introduction</h2>
 
-        <p>Hi, I'm Dominik Kormann and Coding is my long time Passion.</p> 
+        <p>Hi, I'm Dominik Kormann and I coding is what I do.</p> 
 
-        <p>So on this page I want to show you some of my skills and what I want to accomplish in the future.</p>
+        <p>On this page I want to show you some of my skills and what I want to accomplish in the future.</p>
 
 
         <h3>technical skills:</h3>
 
         <p>strong:</p>
         <ul>
-            <li>Python</li>
-            <li>Html / Javascript + Vuejs Framework</li>
+            <li>Machine learning with Python + Pytorch</li>
+            <li>Web dev. with Svelte.js framework</li>
         </ul>
         <p>solid:</p>
         <ul>
-            <li>Java + Spring boot</li>
-            <li>C# + Unity</li>
-            <li>Tensorflow</li>
+            <li>Web dev. + Vue.js</li>
+            <li>Backend with Java + Spring boot</li>
+            <li>Game dev. with C# + Unity</li>
             <li>Webgl shader programming</li>
             <li>Golang</li>
         </ul>
-
+        
         <p>decent</p>
-
+        
         <ul>
             <li>Rust + web assembly</li>
+            <li>Tensorflow</li>
             <li>C</li>
             <li>Haskell</li>
             <li>Lua script language</li>
@@ -68,12 +66,55 @@
 
         <ul>
             <li>Rust and high performance systems</li>
-            <li>Tensorflow and machinge learning</li>
-            <li>organisation and operation of big software Projects</li>
+            <li>Machinge learning</li>
+            <li>Organisation and operation of big software Projects</li>
         </ul>
-        <p>in the following I want to present some software examples</p>
+        <p>in the following I want to present some software I wrote</p>
     </div>
 </div>
+
+
+
+<div class=item>
+    <canvas class= canvas width=1000 height=1000 ></canvas>
+    <div class=itemcontent>
+
+        <h2>Sciepedia</h2>
+
+        <p><a href="https://sciepedia.com">Sciepedia</a> is a notetaking app that makes it easy to create interlinked notes and share them with other users.</p>
+
+    </div>
+</div>
+
+
+
+<div class=item>
+    <canvas class= canvas width=1000 height=1000 ></canvas>
+    <div class=itemcontent>
+
+        <h2>Instalingua</h2>
+
+        <p><a href="https://instalingua.com">Instalingua.com</a> was developed as part of a university Project together with <a href="https://github.com/flo-bit">@flo-bit</a> </p>
+        <p>The Idea is to employ a chat bot to teach you different languages.</p>
+        <p> (On first opening the site it might take a minute since a container is gonna be spun up)</p>
+
+    </div>
+</div>
+
+<!-- 
+
+<div class=item>
+    <canvas class= canvas width=1000 height=1000 ></canvas>
+    <div class=itemcontent>
+
+        <h2>Flai</h2>
+
+        <p><a href="https://dkormann.github.io/flai">Foreign language AI</a> was developed as part of a university Project together with <a href="https://github.com/flo-bit">@flo-bit</a> </p>
+
+    </div>
+</div> -->
+
+
 
 
 <div class=item>
@@ -82,10 +123,10 @@
 
         <h2>Monsunbloom</h2>
 
-        <p>This is a website that wants to teach you math in a more modern way. Try it out here: <a href="https://www.monsunbloom.com">Monsunbloom</a></p>
+        <p>This is a website that wants to teach you math in a more modern way. Try it out here: <a href="https://www.monsunbloom.com">Monsunbloom</a> [site might be down at the moment] </p>
         <p>The Idea is that we want to create a feed of small math challenges for the user that are tunes to the current skillset of the student.</p>
 
-        <h3>Softaware:</h3>
+        <h3>Software:</h3>
 
         <p>
             The frontend is a relatively simple svelte application. 
@@ -110,31 +151,3 @@
 
     </div>
 </div>
-
-
-<div class=item>
-    <canvas class= canvas width=1000 height=1000 ></canvas>
-    <div class=itemcontent>
-
-        <h2>Sciepedia</h2>
-
-        <p><a href="https://www.sciepedia.com">Sciepedia</a> is a notetaking app that makes it easy to create interlinked notes and share them with other users.</p>
-
-    </div>
-</div>
-
-
-
-<div class=item>
-    <canvas class= canvas width=1000 height=1000 ></canvas>
-    <div class=itemcontent>
-
-        <h2>Flai</h2>
-
-        <p><a href="https://dkormann.github.io/flai">Foreign language AI</a> was developed as part of a university Project together with <a href="https://github.com/flo-bit">@flo-bit</a> </p>
-
-    </div>
-</div>
-
-
-

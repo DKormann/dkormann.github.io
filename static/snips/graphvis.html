@@ -45,13 +45,20 @@
     to.connections.push(from)
   }
 
-
   function log(x){
     console.log(x)
     return x
   }
 
-  graph.nodes.forEach(node=> add_edge(node, graph.nodes[Math.floor(Math.random() * (N_nodes-1))]))
+  function randn (N){
+    return Math.floor(Math.random() * N)
+  }
+
+
+  // graph.nodes.forEach(node=> add_edge(node, graph.nodes[Math.floor(Math.random() * (N_nodes-1))]))
+  for (let i = 0; i < Math.floor(N_nodes*1.2); i++){
+    add_edge(graph.nodes[randn(N_nodes/10)], graph.nodes[randn(N_nodes)])
+  }
   
   function cost (node, pos){
 

@@ -58,11 +58,13 @@
   
   function cost (node, pos){
 
-    const distcost= node.connections.concat(centerpoint).reduce((acc, connection) => {
+    const distcost= node.connections.reduce((acc, connection) => {
       let dx = pos.x - connection.x
       let dy = pos.y - connection.y
       return acc + Math.sqrt(dx*dx + dy*dy)
     }, 0)
+
+    const centercost = Math.sqrt((pos.x - centerpoint.x)**2 + (pos.y - centerpoint.y)**2) / 2
 
     const repcost = graph.nodes.reduce((acc, othernode) => {
       if (othernode != node){
@@ -86,21 +88,16 @@
     }
   }
 
-  function anneal(){
+  function anneal(nodes, nsteps = 50, maxtemp = 100, mintemp = 20){
 
-    maxtemp = 100
-    mintemp = 20
-    nsteps = 50
     
     for (let i = 0; i < nsteps; i++){
-
-      graph.nodes.forEach(node => anneal_node(node, maxtemp - (maxtemp - mintemp) * i / nsteps))
-
+      nodes.forEach(node => anneal_node(node, maxtemp - (maxtemp - mintemp) * i / nsteps))
     }
 
   }
 
-  anneal()
+  anneal(graph.nodes)
 
   let selected_nodes = []
 
@@ -153,6 +150,7 @@
   document.addEventListener('mousemove', e=>{
     if (mousepressed){
       selected_nodes.forEach(node => {
+        anneal(node.connections, 10, 20, 10)
         node.x = e.clientX-10
         node.y = e.clientY-10
       })

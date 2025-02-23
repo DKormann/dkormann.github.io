@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <style>
+    body{
+      background-color: black;
+      color:white;
+    }
+  </style>
+
+
+</head>
+<body>
+
+<svg id="mySvg" width="800" height="600" ></svg>
+
+<script>
+
+  var graph = {
+    nodes: [
+      {id: 1, label: 'Node 1'},
+      {id: 2, label: 'Node 2'},
+      {id: 3, label: 'Node 3'},
+      {id: 4, label: 'Node 4'},
+      {id: 5, label: 'Node 5'}
+    ],
+    edges: [
+      {from: 1, to: 2},
+      {from: 1, to: 3},
+      {from: 2, to: 4},
+      {from: 2, to: 5}
+    ]
+  };
+
+  const svg = document.querySelector('#mySvg');
+  svg.setAttribute('width', '1000');
+  svg.setAttribute('height', '1000');
+  console.log(document.body);
+  
+  document.body.appendChild(svg);
+
+  function create_dot(x,y){
+    let dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+    dot.setAttribute('r', '5')
+    dot.setAttribute('stroke', 'white')
+    dot.setAttribute('fill', 'white')
+
+    dot.setAttribute('cx', x)
+    dot.setAttribute('cy', y)
+    return dot
+  }
+
+  function connect_dots(a, b){
+    let line = document.createElementNS('http://www.w3.org/2000/svg', 'line')
+    line.setAttribute('x1', a.x)
+    line.setAttribute('y1', a.y)
+    line.setAttribute('x2', b.x)
+    line.setAttribute('y2', b.y)
+    line.setAttribute('stroke', 'white')
+    return line
+  }
+
+  let a = svg.appendChild(create_dot(100,100))
+  let b = svg.appendChild(create_dot(200,200))
+  svg.appendChild(connect_dots({x:100, y:100}, {x:200, y:200}))
+
+</script>
+  
+</body>
+</html>

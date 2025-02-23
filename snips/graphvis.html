@@ -29,8 +29,6 @@
   
   const centerpoint = {x: svg.clientWidth/2, y: svg.clientHeight/2}
 
-
-
   const N_nodes = 100
 
   let graph = {
@@ -87,7 +85,7 @@
     }
   }
 
-  function anneal(nodes, nsteps = 100, maxtemp = 100, mintemp = 20){
+  function anneal(nodes, nsteps = 200, maxtemp = 100, mintemp = 20){
     for (let i = 0; i < nsteps; i++){
       nodes.forEach(node => anneal_node(node, maxtemp - (maxtemp - mintemp) * i / nsteps))
     }
@@ -131,6 +129,11 @@
     graph.nodes.map(node => shownode(node))
   }
 
+  setInterval(() => {
+    anneal(graph.nodes, 10, 2, 1)
+    show()
+  }, 100);
+
   show()
 
   let dragstart = undefined
@@ -139,19 +142,34 @@
   document.addEventListener('mousedown', e=>{
     if (e.target.id && e.target.id.startsWith('node'))
       selected_nodes = graph.nodes.filter(node => node.id == e.target.id.replace('node', ''))
-
+    else{
+      selected_nodes = []
+      dragstart = {x: e.clientX, y: e.clientY}
+    }
     mousepressed=true
     show()
   })
   document.addEventListener('mouseup', e=>{mousepressed=false})
   document.addEventListener('mousemove', e=>{
     if (mousepressed){
-      selected_nodes.forEach(node => {
-        anneal(node.connections, 10, 20, 10)
-        node.x = e.clientX-10
-        node.y = e.clientY-10
-      })
-      show()
+      if (selected_nodes.length > 0){
+        selected_nodes.forEach(node => {
+          anneal(node.connections, 10, 20, 10)
+          node.x = e.clientX-10
+          node.y = e.clientY-10
+        })
+        show()
+      }
+      else{
+        graph.nodes.map(node=>{
+          node.x = node.x + e.clientX - dragstart.x
+          node.y = node.y + e.clientY - dragstart.y
+        })
+
+        dragstart = {x: e.clientX, y: e.clientY}
+        show()
+
+      }
     }
   })
 

@@ -21,25 +21,86 @@
 <script>
 
 
-
-  const N_nodes = 100
-
-  let graph = {
-    nodes: Array.from({length: N_nodes}, (_, i) => ({id: i+1, label: 'Node '+(i+1),
-      x: Math.random() * 800, y: Math.random() * 600})),
-
-    
-    edges: Array.from({length: N_nodes}, (_, i) => ({from: i+1, to: Math.floor(Math.random() * N_nodes) + 1}))
-  }
-
-  graph = {...graph, nodes: graph.nodes.map(node => ({...node, x: Math.random() * 800, y: Math.random() * 600}))}
-
   const svg = document.querySelector('#mySvg');
   svg.setAttribute('width', '1000');
   svg.setAttribute('height', '1000');
   
   document.body.appendChild(svg);
+  
+  const centerpoint = {x: svg.clientWidth/2, y: svg.clientHeight/2}
 
+
+
+  const N_nodes = 100
+
+  let graph = {
+    nodes: Array.from({length: N_nodes}, (_, i) => ({id: i, label: 'Node '+(i+1),
+      x: Math.random() * 800, y: Math.random() * 600, connections: []})),
+    
+    edges:[]// Array.from({length: N_nodes}, (_, i) => ({from: i+1, to: Math.floor(Math.random() * N_nodes) + 1}))
+  }
+
+
+  function add_edge(from, to){
+    graph.edges.push({from, to})
+    from.connections.push(to)
+    to.connections.push(from)
+  }
+
+
+  function log(x){
+    console.log(x)
+    return x
+  }
+
+  log(graph.nodes[50])
+  graph.nodes.forEach(node=> add_edge(node, graph.nodes[Math.floor(Math.random() * (N_nodes-1))]))
+  
+  function cost (node, pos){
+
+    const distcost= node.connections.concat(centerpoint).reduce((acc, connection) => {
+      let dx = pos.x - connection.x
+      let dy = pos.y - connection.y
+      return acc + Math.sqrt(dx*dx + dy*dy)
+    }, 0)
+
+    const repcost = graph.nodes.reduce((acc, othernode) => {
+      if (othernode != node){
+        let dx = pos.x - othernode.x
+        let dy = pos.y - othernode.y
+        sqdist = dx*dx + dy*dy
+        return acc + 10000/sqdist 
+      }
+      return acc
+    }, 0)
+
+    return distcost + repcost
+  }
+
+  function anneal_node(node, temp){
+
+    let newpos = {x: node.x + (Math.random() - 0.5) * temp, y: node.y + (Math.random() - 0.5) * temp}
+    if (cost(node, newpos) < cost(node, {x: node.x, y: node.y})){
+      node.x = newpos.x
+      node.y = newpos.y
+    }
+  }
+
+  function anneal(){
+
+    maxtemp = 100
+    mintemp = 20
+    nsteps = 50
+    
+    for (let i = 0; i < nsteps; i++){
+
+      graph.nodes.forEach(node => anneal_node(node, maxtemp - (maxtemp - mintemp) * i / nsteps))
+
+    }
+
+  }
+
+  anneal()
 
   let selected_nodes = []
 
@@ -72,7 +133,7 @@
 
   function show(){
     svg.innerHTML = ''
-    graph.edges.map(edge=>connectnodes(graph.nodes[edge.from-1], graph.nodes[edge.to-1]))
+    graph.edges.map(edge=>connectnodes(edge.from, edge.to))
     graph.nodes.map(node => shownode(node))
   }
 

@@ -53,7 +53,6 @@
     return x
   }
 
-  log(graph.nodes[50])
   graph.nodes.forEach(node=> add_edge(node, graph.nodes[Math.floor(Math.random() * (N_nodes-1))]))
   
   function cost (node, pos){
@@ -88,9 +87,7 @@
     }
   }
 
-  function anneal(nodes, nsteps = 50, maxtemp = 100, mintemp = 20){
-
-    
+  function anneal(nodes, nsteps = 100, maxtemp = 100, mintemp = 20){
     for (let i = 0; i < nsteps; i++){
       nodes.forEach(node => anneal_node(node, maxtemp - (maxtemp - mintemp) * i / nsteps))
     }

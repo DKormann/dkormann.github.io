@@ -39,34 +39,45 @@
   const svg = document.querySelector('#mySvg');
   svg.setAttribute('width', '1000');
   svg.setAttribute('height', '1000');
-  console.log(document.body);
+
   
   document.body.appendChild(svg);
 
-  function create_dot(x,y){
+
+
+  function shownode(node){
+    
+
+    let x = Math.random() * 800
+    let y = Math.random() * 600
     let dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
     dot.setAttribute('r', '5')
     dot.setAttribute('stroke', 'white')
     dot.setAttribute('fill', 'white')
+    dot.setAttribute('id', 'node'+node.id)
+    dot.setAttribute('label', node.label)
 
     dot.setAttribute('cx', x)
     dot.setAttribute('cy', y)
+    console.log(dot)
+    svg.appendChild(dot)
     return dot
+
   }
 
-  function connect_dots(a, b){
+  function connectnodes(a, b){
     let line = document.createElementNS('http://www.w3.org/2000/svg', 'line')
-    line.setAttribute('x1', a.x)
-    line.setAttribute('y1', a.y)
-    line.setAttribute('x2', b.x)
-    line.setAttribute('y2', b.y)
+    line.setAttribute('x1', a.getAttribute('cx'))
+    line.setAttribute('y1', a.getAttribute('cy'))
+    line.setAttribute('x2', b.getAttribute('cx'))
+    line.setAttribute('y2', b.getAttribute('cy'))
     line.setAttribute('stroke', 'white')
+    svg.appendChild(line)
     return line
   }
 
-  let a = svg.appendChild(create_dot(100,100))
-  let b = svg.appendChild(create_dot(200,200))
-  svg.appendChild(connect_dots({x:100, y:100}, {x:200, y:200}))
+  let dots = graph.nodes.map(node => shownode(node))
+  let lines = graph.edges.map(edge => connectnodes(dots[edge.from - 1], dots[edge.to - 1]))
 
 </script>
   

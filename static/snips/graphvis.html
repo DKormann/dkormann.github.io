@@ -21,26 +21,6 @@
 <script>
 
 
-  /**
-   *
-   * @type {{nodes: {id: number, label: string}[], edges: {from: number, to: number}[]}}
-   */
-  // let graph = {
-  //   nodes: [
-  //     {id: 1, label: 'Node 1'},
-  //     {id: 2, label: 'Node 2'},
-  //     {id: 3, label: 'Node 3'},
-  //     {id: 4, label: 'Node 4'},
-  //     {id: 5, label: 'Node 5'}
-  //   ],
-  //   edges: [
-  //     {from: 1, to: 2},
-  //     {from: 1, to: 3},
-  //     {from: 2, to: 4},
-  //     {from: 2, to: 5}
-  //   ]
-  // };
-
 
   const N_nodes = 100
 
@@ -60,13 +40,15 @@
   
   document.body.appendChild(svg);
 
-  function shownode(node){
 
+  let selected_nodes = []
+
+  function shownode(node){
 
     let dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
     dot.setAttribute('r', '5')
     dot.setAttribute('stroke', 'white')
-    dot.setAttribute('fill', 'white')
+    dot.setAttribute('fill', selected_nodes.includes(node) ? 'white' : 'gray')
     dot.setAttribute('id', 'node'+node.id)
     dot.setAttribute('label', node.label)
 
@@ -78,11 +60,11 @@
 
   function connectnodes(a, b){
     let line = document.createElementNS('http://www.w3.org/2000/svg', 'line')
-    line.setAttribute('x1', a.getAttribute('cx'))
-    line.setAttribute('y1', a.getAttribute('cy'))
-    line.setAttribute('x2', b.getAttribute('cx'))
-    line.setAttribute('y2', b.getAttribute('cy'))
-    line.setAttribute('stroke', 'white')
+    line.setAttribute('x1', a.x)
+    line.setAttribute('y1', a.y)
+    line.setAttribute('x2', b.x)
+    line.setAttribute('y2', b.y)
+    line.setAttribute('stroke', (selected_nodes.includes(a) || selected_nodes.includes(b)) ? 'white' : 'gray')
     svg.appendChild(line)
     return line
   }
@@ -90,40 +72,32 @@
 
   function show(){
     svg.innerHTML = ''
-    let dots = graph.nodes.map(node => shownode(node))
-    let lines = graph.edges.map(edge => connectnodes(dots[edge.from - 1], dots[edge.to - 1]))
+    graph.edges.map(edge=>connectnodes(graph.nodes[edge.from-1], graph.nodes[edge.to-1]))
+    graph.nodes.map(node => shownode(node))
   }
 
   show()
 
-  let selected_nodes = []
-
   let dragstart = undefined
-
   let mousepressed = false
 
-  document.addEventListener('click', e=>{
-
-  })
-  
   document.addEventListener('mousedown', e=>{
-    if (e.target.id && e.target.id.startsWith('node')){
+    if (e.target.id && e.target.id.startsWith('node'))
       selected_nodes = graph.nodes.filter(node => node.id == e.target.id.replace('node', ''))
-    }
+
     mousepressed=true
+    show()
   })
   document.addEventListener('mouseup', e=>{mousepressed=false})
-
   document.addEventListener('mousemove', e=>{
     if (mousepressed){
       selected_nodes.forEach(node => {
-        node.x = e.clientX
-        node.y = e.clientY
+        node.x = e.clientX-10
+        node.y = e.clientY-10
       })
       show()
     }
   })
-
 
 </script>
   

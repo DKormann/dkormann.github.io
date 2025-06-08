@@ -30,7 +30,7 @@
 
         <h2>Introduction</h2>
 
-        <p>Hi, I'm Dominik Kormann and I coding is what I do.</p> 
+        <p>Hi, I'm Dominik Kormann and coding is what I do.</p> 
 
         <p>On this page I want to show you some of my skills and what I want to accomplish in the future.</p>
 

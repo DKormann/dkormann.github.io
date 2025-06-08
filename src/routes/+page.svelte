@@ -66,7 +66,7 @@
 
         <ul>
             <li>Rust and high performance systems</li>
-            <li>Machinge learning</li>
+            <li>Machine learning</li>
             <li>Organisation and operation of big software Projects</li>
         </ul>
         <p>
@@ -149,7 +149,7 @@
         </p>
 
         <p>The backend is a golang project running that exposes all the api routes needed for the frontend. On user login we first verify the credentials and create a temporary user token.
-            All subsequent user requests mus be send with this token.
+            All subsequent user requests must be send with this token.
         </p>
 
         <p>

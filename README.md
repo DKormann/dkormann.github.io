@@ -1,38 +1,31 @@
-# create-svelte
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
 
-## Creating a project
+# dkormann Frontend
 
-If you're seeing this, you've probably already done this step. Congrats!
+create and host website in 5 minutes only writing typescript
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+this will create a vite app with typescript
 
-# create a new project in my-app
-npm create svelte@latest my-app
+just run this command in terminal: (need npm installed)
+
+```
+source <(wget -qO- https://raw.githubusercontent.com/DKormann/dkormann/refs/heads/main/viteapp.sh) YOUR_APP_NAME
 ```
 
-## Developing
+inspect the script if you dont trust its v minimal
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
-```bash
-npm run dev
+SETUP DONE! just start editing `src/main.ts`
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+the project will build into `/docs` which is perfect for gh-pages.
 
-## Building
+## hosting:
+just go to github repo > settings > pages and select host from branch main and from folder /docs 
 
-To create a production version of your app:
 
-```bash
-npm run build
-```
+## development cycle:
 
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+1. edit typescript in src folder 
+2. run `npm run dev` to see changes live
+3. run `npm run build` to build for gh-pages
+4. commit and push -> everything will be updated on your site

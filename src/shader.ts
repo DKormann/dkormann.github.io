@@ -430,8 +430,6 @@ ${WebGlCompiler(nodes)}
 }`
 
 
-    
-
     const program = gl.createProgram()!;
     gl.attachShader(program, compileShader(vertexShader, gl.VERTEX_SHADER));
     gl.attachShader(program, compileShader(fragShader, gl.FRAGMENT_SHADER));
@@ -470,20 +468,6 @@ ${WebGlCompiler(nodes)}
       window.innerHeight - rect.top - rect.height,
     )
 
-    // console.log(rect.bottom);
-    
-
-    console.log(PosOffset.value);
-
-    console.log(canvas);
-
-    // console.log(canvas);
-
-    console.log(canvas.getBoundingClientRect());
-    
-    
-    
-    
     canvas.width = rect.width
     canvas.height = rect.height
     Resolution.set(canvas.width, canvas.height)
